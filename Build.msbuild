@@ -12,26 +12,29 @@
 
   <Target Name="Packages">
     <Exec Command="$(NuGet) restore -PackagesDirectory $(PackagesDirectory)" WorkingDirectory="$(SourceFolder)" />
-    <!--<Exec Command="$(NuGet) update Sitecore.FakeDb.sln" WorkingDirectory="$(SourceFolder)" />-->
   </Target>
 
   <Target Name="Build" DependsOnTargets="Clean;Packages">
     <MSBuild Projects="$(ProjectToBuild)" Properties="Configuration=Release" />
   </Target>
 
-  <Target Name="Test" DependsOnTargets="Build">
+  <Target Name="Configs">
+    <!-- NSubstitute -->
+    <Copy SourceFiles="$(SourceFolder)\Sitecore.FakeDb.NSubstitute.Tests\bin\Release\Sitecore.FakeDb.NSubstitute.Tests.dll.config"
+          DestinationFiles="$(NSubstituteOutputFolder)\Sitecore.FakeDb.Tests.dll.config" />
+
+    <!-- Serialization -->
+    <Copy SourceFiles="$(SourceFolder)\Sitecore.FakeDb.Serialization.Tests\bin\Release\Sitecore.FakeDb.Serialization.Tests.dll.config"
+          DestinationFiles="$(SerializationOutputFolder)\Sitecore.FakeDb.Tests.dll.config" />
+  </Target>
+
+  <Target Name="Test" DependsOnTargets="Build;Configs">
     <xunit Assembly="$(SourceFolder)\Sitecore.FakeDb.Tests\bin\Release\Sitecore.FakeDb.Tests.dll" />
     <xunit Assembly="$(SourceFolder)\Sitecore.FakeDb.NSubstitute.Tests\bin\Release\Sitecore.FakeDb.NSubstitute.Tests.dll" />
     <xunit Assembly="$(SourceFolder)\Sitecore.FakeDb.Serialization.Tests\bin\Release\Sitecore.FakeDb.Serialization.Tests.dll" />
 
-    <!-- main tests with nsubstitute configs -->
-    <Copy SourceFiles="$(SourceFolder)\Sitecore.FakeDb.NSubstitute.Tests\bin\Release\Sitecore.FakeDb.NSubstitute.Tests.dll.config"
-          DestinationFiles="$(SourceFolder)\Sitecore.FakeDb.NSubstitute.Tests\bin\Release\Sitecore.FakeDb.Tests.dll.config" />
+    <!-- main tests with nsubstitute and serialization configs -->
     <xunit Assembly="$(SourceFolder)\Sitecore.FakeDb.NSubstitute.Tests\bin\Release\Sitecore.FakeDb.Tests.dll" />
-    
-    <!-- main tests with serialization configs -->
-    <Copy SourceFiles="$(SourceFolder)\Sitecore.FakeDb.Serialization.Tests\bin\Release\Sitecore.FakeDb.Serialization.Tests.dll.config"
-          DestinationFiles="$(SourceFolder)\Sitecore.FakeDb.Serialization.Tests\bin\Release\Sitecore.FakeDb.Tests.dll.config" />
     <xunit Assembly="$(SourceFolder)\Sitecore.FakeDb.Serialization.Tests\bin\Release\Sitecore.FakeDb.Tests.dll" />
   </Target>
 
