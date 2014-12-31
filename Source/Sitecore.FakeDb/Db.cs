@@ -26,6 +26,8 @@
 
     private readonly DatabaseSwitcher databaseSwitcher;
 
+    private readonly DbProviders providers;
+
     private DbConfiguration configuration;
 
     private PipelineWatcher pipelineWatcher;
@@ -47,6 +49,7 @@
       this.dataStorage = new DataStorage(this.database);
 
       this.databaseSwitcher = new DatabaseSwitcher(this.database);
+      this.providers = new DbProviders();
 
       var args = new InitDbArgs(this.database, this.dataStorage);
       CorePipeline.Run("initFakeDb", args);
@@ -89,6 +92,11 @@
 
         return this.pipelineWatcher;
       }
+    }
+
+    public DbProviders Providers
+    {
+      get { return this.providers; }
     }
 
     protected internal DataStorage DataStorage
