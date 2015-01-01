@@ -26,7 +26,7 @@
 
     private readonly DatabaseSwitcher databaseSwitcher;
 
-    private readonly DbProviders providers;
+    private readonly DbProviderSet providers;
 
     private DbConfiguration configuration;
 
@@ -49,7 +49,7 @@
       this.dataStorage = new DataStorage(this.database);
 
       this.databaseSwitcher = new DatabaseSwitcher(this.database);
-      this.providers = new DbProviders();
+      this.providers = new DbProviderSet();
 
       var args = new InitDbArgs(this.database, this.dataStorage);
       CorePipeline.Run("initFakeDb", args);
@@ -94,7 +94,7 @@
       }
     }
 
-    public DbProviders Providers
+    public DbProviderSet Providers
     {
       get { return this.providers; }
     }
