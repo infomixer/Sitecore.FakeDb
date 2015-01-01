@@ -1,5 +1,6 @@
 ﻿namespace Sitecore.FakeDb
 {
+  using Sitecore.Diagnostics;
   using System;
   using System.Collections.Generic;
 
@@ -14,6 +15,10 @@
 
     public virtual void Register(Type providerType, Type switcherType)
     {
+      Assert.ArgumentNotNull(providerType, "providerType");
+      Assert.ArgumentNotNull(switcherType, "switcherType");
+
+      this.providers[providerType] = switcherType;
     }
   }
 }
