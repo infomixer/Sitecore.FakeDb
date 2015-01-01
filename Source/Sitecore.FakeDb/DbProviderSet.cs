@@ -8,6 +8,19 @@
   {
     private readonly IDictionary<Type, Type> providers = new Dictionary<Type, Type>();
 
+    private readonly IProviderSwitcherFactory switcherFactory;
+
+    public DbProviderSet()
+    {
+    }
+
+    public DbProviderSet(IProviderSwitcherFactory switcherFactory)
+    {
+      Assert.ArgumentNotNull(switcherFactory, "switcherFactory");
+
+      this.switcherFactory = switcherFactory;
+    }
+
     public IDictionary<Type, Type> Providers
     {
       get { return providers; }
@@ -19,6 +32,21 @@
       Assert.ArgumentNotNull(switcherType, "switcherType");
 
       this.providers[providerType] = switcherType;
+    }
+
+    public virtual void Switch<TProvider>(TProvider provider)
+    {
+      Assert.ArgumentNotNull(provider, "provider");
+
+      var providerType = typeof(TProvider);
+      Assert.IsTrue(
+        this.providers.ContainsKey(providerType),
+        "Unable to switch the provider of type '{0}'. The switcher has not been registered.",
+        providerType);
+
+      var switcherType = this.providers[providerType];
+
+      this.switcherFactory.Create(switcherType, provider);
     }
   }
 }

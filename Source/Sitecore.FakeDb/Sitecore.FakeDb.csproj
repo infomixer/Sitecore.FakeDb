@@ -66,6 +66,7 @@
     <Compile Include="Data\IDTables\FakeIDTableProvider.cs" />
     <Compile Include="DbProviderSet.cs" />
     <Compile Include="IDsDbItem.cs" />
+    <Compile Include="IProviderSwitcherFactory.cs" />
     <Compile Include="IThreadLocalProvider.cs" />
     <Compile Include="Links\FakeLinkDatabase.cs" />
     <Compile Include="Links\LinkDatabaseSwitcher.cs" />
