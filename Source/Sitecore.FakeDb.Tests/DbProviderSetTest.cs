@@ -9,16 +9,6 @@
   {
     private readonly DbProviderSet providerSet = new DbProviderSet();
 
-    // TODO: Move
-    [Fact]
-    public void ShouldInstantiateDbProviders()
-    {
-      using (var db = new Db())
-      {
-        db.Providers.Should().NotBeNull();
-      }
-    }
-
     [Fact]
     public void ShouldHaveNoRegisteredProvidersByDefault()
     {

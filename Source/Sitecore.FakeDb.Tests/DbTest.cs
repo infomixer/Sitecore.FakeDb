@@ -1204,5 +1204,14 @@
         TemplateManager.GetTemplate(this.templateId, db.Database).Should().NotBeNull();
       }
     }
+
+    [Fact]
+    public void ShouldInstantiateDbProviders()
+    {
+      using (var db = new Db())
+      {
+        db.Providers.Should().NotBeNull();
+      }
+    }
   }
 }
