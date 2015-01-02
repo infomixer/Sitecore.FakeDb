@@ -137,6 +137,7 @@
     <Compile Include="DbTest.cs" />
     <Compile Include="DbItemTest.cs" />
     <Compile Include="Data\Query\FastQueryTest.cs" />
+    <Compile Include="DefaultProviderSwitcherFactoryTest.cs" />
     <Compile Include="GettingStarted.cs" />
     <Compile Include="Globalization\TranslateTest.cs" />
     <Compile Include="GlobalsTest.cs" />

@@ -65,6 +65,7 @@
     <Compile Include="Data\Items\ItemWrapper.cs" />
     <Compile Include="Data\IDTables\FakeIDTableProvider.cs" />
     <Compile Include="DbProviderSet.cs" />
+    <Compile Include="DefaultProviderSwitcherFactory.cs" />
     <Compile Include="IDsDbItem.cs" />
     <Compile Include="IProviderSwitcherFactory.cs" />
     <Compile Include="IThreadLocalProvider.cs" />
