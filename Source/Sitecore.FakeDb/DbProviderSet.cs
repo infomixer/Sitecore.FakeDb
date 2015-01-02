@@ -4,11 +4,13 @@
   using System;
   using System.Collections.Generic;
 
-  public class DbProviderSet
+  public class DbProviderSet : IDisposable
   {
     private readonly IDictionary<Type, Type> providers = new Dictionary<Type, Type>();
 
     private readonly IProviderSwitcherFactory switcherFactory;
+
+    private bool disposed;
 
     public DbProviderSet()
     {
@@ -47,6 +49,25 @@
       var switcherType = this.providers[providerType];
 
       this.switcherFactory.Create(switcherType, provider);
+    }
+
+    public void Dispose()
+    {
+      this.Dispose(true);
+      GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+      if (this.disposed)
+      {
+        return;
+      }
+
+      if (!disposing)
+      {
+        return;
+      }
     }
   }
 }

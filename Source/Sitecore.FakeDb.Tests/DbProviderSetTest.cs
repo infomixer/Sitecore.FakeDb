@@ -96,5 +96,12 @@
         .Received()
         .Create(switcherType, provider);
     }
+
+    [Fact]
+    public void ShouldBeDisposable()
+    {
+      // assert
+      this.providerSet.Should().BeAssignableTo<IDisposable>();
+    }
   }
 }
