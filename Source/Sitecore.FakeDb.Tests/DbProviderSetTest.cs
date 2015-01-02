@@ -3,6 +3,7 @@
   using FluentAssertions;
   using NSubstitute;
   using Sitecore.Common;
+  using Sitecore.FakeDb.Tests.Common;
   using Sitecore.Security.Authentication;
   using System;
   using Xunit;
@@ -67,7 +68,7 @@
       // assert
       action
         .ShouldThrow<InvalidOperationException>()
-        .WithMessage("Unable to switch the provider of type 'Sitecore.FakeDb.Tests.DbProviderSetTest+SampleProvider'. The switcher has not been registered.");
+        .WithMessage("Unable to switch the provider of type 'Sitecore.FakeDb.Tests.Common.SampleProvider'. The switcher has not been registered.");
     }
 
     [Fact]
@@ -128,14 +129,6 @@
 
       // assert
       switcher.Received().Dispose();
-    }
-
-    public class SampleProvider : System.Configuration.Provider.ProviderBase
-    {
-    }
-
-    public class SampleProviderSwitcher : Switcher<SampleProvider>
-    {
     }
   }
 }

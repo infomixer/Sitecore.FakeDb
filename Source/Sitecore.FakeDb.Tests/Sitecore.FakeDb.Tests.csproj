@@ -82,6 +82,8 @@
     <Compile Include="..\Sitecore.FakeDb\Properties\AssemblyVersionInfo.cs">
       <Link>Properties\AssemblyVersionInfo.cs</Link>
     </Compile>
+    <Compile Include="Common\SampleProvider.cs" />
+    <Compile Include="Common\SampleProviderSwitcher.cs" />
     <Compile Include="DbProviderSetTest.cs" />
     <Compile Include="Data\BranchRecordsTest.cs" />
     <Compile Include="Data\Engines\DataCommands\BlobStreamExistsCommandTest.cs" />
