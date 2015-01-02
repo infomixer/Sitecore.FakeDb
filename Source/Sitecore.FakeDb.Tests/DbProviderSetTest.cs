@@ -103,5 +103,31 @@
       // assert
       this.providerSet.Should().BeAssignableTo<IDisposable>();
     }
+
+    [Fact]
+    public void ShouldDisposeSwitcher()
+    {
+      // arrange
+      var providerType = typeof(AuthenticationProvider);
+      var switcherType = typeof(AuthenticationSwitcher);
+
+      var provider = Substitute.For<AuthenticationProvider>();
+      var switcher = Substitute.For<AuthenticationSwitcher>(provider);
+
+      var switcherFactory = Substitute.For<IProviderSwitcherFactory>();
+      switcherFactory
+        .Create(switcherType, provider)
+        .Returns(switcher);
+
+      var providerSet = new DbProviderSet(switcherFactory);
+      providerSet.Register(providerType, switcherType);
+      providerSet.Switch<AuthenticationProvider>(provider);
+
+      // act
+      providerSet.Dispose();
+
+      // assert
+      switcher.Received().Dispose();
+    }
   }
 }

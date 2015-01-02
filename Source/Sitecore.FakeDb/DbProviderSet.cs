@@ -3,20 +3,26 @@
   using Sitecore.Diagnostics;
   using System;
   using System.Collections.Generic;
+  using System.Collections.ObjectModel;
 
   public class DbProviderSet : IDisposable
   {
-    private readonly IDictionary<Type, Type> providers = new Dictionary<Type, Type>();
+    private readonly IDictionary<Type, Type> providers;
 
     private readonly IProviderSwitcherFactory switcherFactory;
+
+    private readonly IList<IDisposable> switchers;
 
     private bool disposed;
 
     public DbProviderSet()
     {
+      this.providers = new Dictionary<Type, Type>();
+      this.switchers = new Collection<IDisposable>();
     }
 
     public DbProviderSet(IProviderSwitcherFactory switcherFactory)
+      : this()
     {
       Assert.ArgumentNotNull(switcherFactory, "switcherFactory");
 
@@ -26,6 +32,16 @@
     public IDictionary<Type, Type> Providers
     {
       get { return providers; }
+    }
+
+    protected IProviderSwitcherFactory SwitcherFactory
+    {
+      get { return this.switcherFactory; }
+    }
+
+    protected IList<IDisposable> Switchers
+    {
+      get { return this.switchers; }
     }
 
     public virtual void Register(Type providerType, Type switcherType)
@@ -48,7 +64,8 @@
 
       var switcherType = this.providers[providerType];
 
-      this.switcherFactory.Create(switcherType, provider);
+      var switcher = this.switcherFactory.Create(switcherType, provider);
+      this.switchers.Add(switcher);
     }
 
     public void Dispose()
@@ -68,6 +85,13 @@
       {
         return;
       }
+
+      foreach (var switcher in this.switchers)
+      {
+        switcher.Dispose();
+      }
+
+      this.disposed = true;
     }
   }
 }
