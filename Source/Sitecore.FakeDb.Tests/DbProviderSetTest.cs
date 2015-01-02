@@ -27,8 +27,8 @@
     public void ShouldRegisterDbProvider()
     {
       // arrange
-      var providerType = typeof(AuthenticationProvider);
-      var switcherType = typeof(AuthenticationSwitcher);
+      var providerType = typeof(SampleProvider);
+      var switcherType = typeof(SampleProviderSwitcher);
 
       // act
       providerSet.Register(providerType, switcherType);
@@ -42,9 +42,9 @@
     public void ShouldUseLatestRegistration()
     {
       // arrange
-      var providerType = typeof(AuthenticationProvider);
-      var switcherType1 = typeof(Switcher<AuthenticationProvider>);
-      var switcherType2 = typeof(AuthenticationSwitcher);
+      var providerType = typeof(SampleProvider);
+      var switcherType1 = typeof(Switcher<SampleProvider>);
+      var switcherType2 = typeof(SampleProviderSwitcher);
 
       // act
       providerSet.Register(providerType, switcherType1);
@@ -59,26 +59,26 @@
     public void ShouldThrowExceptionIfNoSwitcherRegistered()
     {
       // arrange
-      var provider = Substitute.For<AuthenticationProvider>();
+      var provider = Substitute.For<SampleProvider>();
 
       // act
-      Action action = () => providerSet.Switch<AuthenticationProvider>(provider);
+      Action action = () => providerSet.Switch<SampleProvider>(provider);
 
       // assert
       action
         .ShouldThrow<InvalidOperationException>()
-        .WithMessage("Unable to switch the provider of type 'Sitecore.Security.Authentication.AuthenticationProvider'. The switcher has not been registered.");
+        .WithMessage("Unable to switch the provider of type 'Sitecore.FakeDb.Tests.DbProviderSetTest+SampleProvider'. The switcher has not been registered.");
     }
 
     [Fact]
     public void ShouldSwitchProvider()
     {
       // arrange
-      var providerType = typeof(AuthenticationProvider);
-      var switcherType = typeof(AuthenticationSwitcher);
+      var providerType = typeof(SampleProvider);
+      var switcherType = typeof(SampleProviderSwitcher);
 
-      var provider = Substitute.For<AuthenticationProvider>();
-      var switcher = Substitute.For<AuthenticationSwitcher>(provider);
+      var provider = Substitute.For<SampleProvider>();
+      var switcher = Substitute.For<SampleProviderSwitcher>();
 
       var switcherFactory = Substitute.For<IProviderSwitcherFactory>();
       switcherFactory
@@ -89,7 +89,7 @@
       providerSet.Register(providerType, switcherType);
 
       // act
-      providerSet.Switch<AuthenticationProvider>(provider);
+      providerSet.Switch<SampleProvider>(provider);
 
       // assert
       switcherFactory
@@ -108,11 +108,11 @@
     public void ShouldDisposeSwitcher()
     {
       // arrange
-      var providerType = typeof(AuthenticationProvider);
-      var switcherType = typeof(AuthenticationSwitcher);
+      var providerType = typeof(SampleProvider);
+      var switcherType = typeof(SampleProviderSwitcher);
 
-      var provider = Substitute.For<AuthenticationProvider>();
-      var switcher = Substitute.For<AuthenticationSwitcher>(provider);
+      var provider = Substitute.For<SampleProvider>();
+      var switcher = Substitute.For<SampleProviderSwitcher>();
 
       var switcherFactory = Substitute.For<IProviderSwitcherFactory>();
       switcherFactory
@@ -121,13 +121,21 @@
 
       var providerSet = new DbProviderSet(switcherFactory);
       providerSet.Register(providerType, switcherType);
-      providerSet.Switch<AuthenticationProvider>(provider);
+      providerSet.Switch<SampleProvider>(provider);
 
       // act
       providerSet.Dispose();
 
       // assert
       switcher.Received().Dispose();
+    }
+
+    public class SampleProvider : System.Configuration.Provider.ProviderBase
+    {
+    }
+
+    public class SampleProviderSwitcher : Switcher<SampleProvider>
+    {
     }
   }
 }
