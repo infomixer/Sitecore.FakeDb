@@ -54,7 +54,7 @@
       // TODO: Move to pipeline.
       this.providers = new DbProviderSet(new DefaultProviderSwitcherFactory());
 
-      var args = new InitDbArgs(this.database, this.dataStorage);
+      var args = new InitDbArgs(this.database, this.dataStorage) { Providers = this.providers };
       CorePipeline.Run("initFakeDb", args);
     }
 
