@@ -45,8 +45,7 @@
       get { return this.switchers; }
     }
 
-    // TODO: Rename to RegisterSwitcher.
-    public virtual void Register(Type providerType, Type switcherType)
+    public virtual void RegisterSwitcher(Type providerType, Type switcherType)
     {
       Assert.ArgumentNotNull(providerType, "providerType");
       Assert.ArgumentNotNull(switcherType, "switcherType");

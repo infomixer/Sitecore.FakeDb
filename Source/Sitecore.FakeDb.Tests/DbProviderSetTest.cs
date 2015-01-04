@@ -32,7 +32,7 @@
       var switcherType = typeof(SampleProviderSwitcher);
 
       // act
-      providerSet.Register(providerType, switcherType);
+      providerSet.RegisterSwitcher(providerType, switcherType);
 
       // assert
       providerSet.Providers.Should().ContainKey(providerType);
@@ -48,8 +48,8 @@
       var switcherType2 = typeof(SampleProviderSwitcher);
 
       // act
-      providerSet.Register(providerType, switcherType1);
-      providerSet.Register(providerType, switcherType2);
+      providerSet.RegisterSwitcher(providerType, switcherType1);
+      providerSet.RegisterSwitcher(providerType, switcherType2);
 
       // assert
       providerSet.Providers.Should().ContainKey(providerType);
@@ -87,7 +87,7 @@
         .Returns(switcher);
 
       var providerSet = new DbProviderSet(switcherFactory);
-      providerSet.Register(providerType, switcherType);
+      providerSet.RegisterSwitcher(providerType, switcherType);
 
       // act
       providerSet.Switch<SampleProvider>(provider);
@@ -121,7 +121,7 @@
         .Returns(switcher);
 
       var providerSet = new DbProviderSet(switcherFactory);
-      providerSet.Register(providerType, switcherType);
+      providerSet.RegisterSwitcher(providerType, switcherType);
       providerSet.Switch<SampleProvider>(provider);
 
       // act

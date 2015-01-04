@@ -31,7 +31,7 @@
           continue;
         }
 
-        args.Providers.Register(providerType, switcherType);
+        args.Providers.RegisterSwitcher(providerType, switcherType);
       }
     }
   }

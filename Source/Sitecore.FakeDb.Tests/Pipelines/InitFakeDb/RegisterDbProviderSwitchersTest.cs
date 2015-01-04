@@ -68,7 +68,7 @@
       processor.Process(args);
 
       // assert
-      providers.Received().Register(providerType, switcherType);
+      providers.Received().RegisterSwitcher(providerType, switcherType);
     }
   }
 }
