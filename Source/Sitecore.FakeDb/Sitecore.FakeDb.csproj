@@ -81,6 +81,7 @@
     <Compile Include="Pipelines\AddDbItem\SetFullPath.cs" />
     <Compile Include="Pipelines\AddDbItem\CreateItem.cs" />
     <Compile Include="Pipelines\AddDbItem\CreateChildren.cs" />
+    <Compile Include="Pipelines\InitFakeDb\RegisterDbProviderSwitchers.cs" />
     <Compile Include="Pipelines\ReleaseFakeDb\ReleaseDbArgs.cs" />
     <Compile Include="Pipelines\GetTranslation\GetFakeTranslation.cs" />
     <Compile Include="Pipelines\InitFakeDb\InitGlobals.cs" />

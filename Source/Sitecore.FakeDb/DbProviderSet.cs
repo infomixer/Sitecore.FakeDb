@@ -29,6 +29,7 @@
       this.switcherFactory = switcherFactory;
     }
 
+    // TODO: Make it readonly.
     public IDictionary<Type, Type> Providers
     {
       get { return providers; }
@@ -44,6 +45,7 @@
       get { return this.switchers; }
     }
 
+    // TODO: Rename to RegisterSwitcher.
     public virtual void Register(Type providerType, Type switcherType)
     {
       Assert.ArgumentNotNull(providerType, "providerType");

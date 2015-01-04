@@ -15,5 +15,7 @@
     public Database Database { get; private set; }
 
     public DataStorage DataStorage { get; private set; }
+
+    public DbProviderSet Providers { get; set; }
   }
 }
