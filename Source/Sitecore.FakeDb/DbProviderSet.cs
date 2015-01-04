@@ -15,17 +15,12 @@
 
     private bool disposed;
 
-    public DbProviderSet()
-    {
-      this.providers = new Dictionary<Type, Type>();
-      this.switchers = new Collection<IDisposable>();
-    }
-
     public DbProviderSet(IProviderSwitcherFactory switcherFactory)
-      : this()
     {
       Assert.ArgumentNotNull(switcherFactory, "switcherFactory");
 
+      this.providers = new Dictionary<Type, Type>();
+      this.switchers = new Collection<IDisposable>();
       this.switcherFactory = switcherFactory;
     }
 

@@ -10,18 +10,21 @@
 
   public class DbProviderSetTest
   {
+    private readonly IProviderSwitcherFactory switcherFactory;
+
     private readonly DbProviderSet providerSet;
 
     public DbProviderSetTest()
     {
-      this.providerSet = new DbProviderSet();
+      this.switcherFactory = Substitute.For<IProviderSwitcherFactory>();
+      this.providerSet = new DbProviderSet(switcherFactory);
     }
 
     [Fact]
     public void ShouldHaveNoRegisteredProvidersByDefault()
     {
       // assert
-      providerSet.Providers.Should().BeEmpty();
+      this.providerSet.Providers.Should().BeEmpty();
     }
 
     [Fact]
@@ -32,11 +35,11 @@
       var switcherType = typeof(SampleProviderSwitcher);
 
       // act
-      providerSet.RegisterSwitcher(providerType, switcherType);
+      this.providerSet.RegisterSwitcher(providerType, switcherType);
 
       // assert
-      providerSet.Providers.Should().ContainKey(providerType);
-      providerSet.Providers[providerType].Should().BeSameAs(switcherType);
+      this.providerSet.Providers.Should().ContainKey(providerType);
+      this.providerSet.Providers[providerType].Should().BeSameAs(switcherType);
     }
 
     [Fact]
@@ -48,12 +51,12 @@
       var switcherType2 = typeof(SampleProviderSwitcher);
 
       // act
-      providerSet.RegisterSwitcher(providerType, switcherType1);
-      providerSet.RegisterSwitcher(providerType, switcherType2);
+      this.providerSet.RegisterSwitcher(providerType, switcherType1);
+      this.providerSet.RegisterSwitcher(providerType, switcherType2);
 
       // assert
-      providerSet.Providers.Should().ContainKey(providerType);
-      providerSet.Providers[providerType].Should().BeSameAs(switcherType2);
+      this.providerSet.Providers.Should().ContainKey(providerType);
+      this.providerSet.Providers[providerType].Should().BeSameAs(switcherType2);
     }
 
     [Fact]
@@ -63,7 +66,7 @@
       var provider = Substitute.For<SampleProvider>();
 
       // act
-      Action action = () => providerSet.Switch<SampleProvider>(provider);
+      Action action = () => this.providerSet.Switch<SampleProvider>(provider);
 
       // assert
       action
@@ -81,19 +84,17 @@
       var provider = Substitute.For<SampleProvider>();
       var switcher = Substitute.For<SampleProviderSwitcher>();
 
-      var switcherFactory = Substitute.For<IProviderSwitcherFactory>();
-      switcherFactory
+      this.switcherFactory
         .Create(switcherType, provider)
         .Returns(switcher);
 
-      var providerSet = new DbProviderSet(switcherFactory);
-      providerSet.RegisterSwitcher(providerType, switcherType);
+      this.providerSet.RegisterSwitcher(providerType, switcherType);
 
       // act
-      providerSet.Switch<SampleProvider>(provider);
+      this.providerSet.Switch<SampleProvider>(provider);
 
       // assert
-      switcherFactory
+      this.switcherFactory
         .Received()
         .Create(switcherType, provider);
     }
@@ -115,17 +116,15 @@
       var provider = Substitute.For<SampleProvider>();
       var switcher = Substitute.For<SampleProviderSwitcher>();
 
-      var switcherFactory = Substitute.For<IProviderSwitcherFactory>();
-      switcherFactory
+      this.switcherFactory
         .Create(switcherType, provider)
         .Returns(switcher);
 
-      var providerSet = new DbProviderSet(switcherFactory);
-      providerSet.RegisterSwitcher(providerType, switcherType);
-      providerSet.Switch<SampleProvider>(provider);
+      this.providerSet.RegisterSwitcher(providerType, switcherType);
+      this.providerSet.Switch<SampleProvider>(provider);
 
       // act
-      providerSet.Dispose();
+      this.providerSet.Dispose();
 
       // assert
       switcher.Received().Dispose();

@@ -48,8 +48,11 @@
       this.database = Database.GetDatabase(databaseName);
       this.dataStorage = new DataStorage(this.database);
 
+      // TODO: Move to pipeline.
       this.databaseSwitcher = new DatabaseSwitcher(this.database);
-      this.providers = new DbProviderSet();
+
+      // TODO: Move to pipeline.
+      this.providers = new DbProviderSet(new DefaultProviderSwitcherFactory());
 
       var args = new InitDbArgs(this.database, this.dataStorage);
       CorePipeline.Run("initFakeDb", args);

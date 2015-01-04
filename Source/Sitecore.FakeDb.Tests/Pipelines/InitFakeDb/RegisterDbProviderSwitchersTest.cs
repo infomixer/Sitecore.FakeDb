@@ -61,7 +61,7 @@
     public void ShouldRegisterDbProviderSwitchers(Type providerType, Type switcherType)
     {
       // arrange
-      var providers = Substitute.For<DbProviderSet>();
+      var providers = Substitute.For<DbProviderSet>(Substitute.For<IProviderSwitcherFactory>());
       var args = new InitDbArgs(database, dataStorage) { Providers = providers };
 
       // act
