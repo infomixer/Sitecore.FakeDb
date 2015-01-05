@@ -105,5 +105,21 @@
       // assert
       providers.Received().RegisterSwitcher(providerType, switcherType);
     }
+
+    [Fact]
+    public void ShouldRegisterSwitchersOnly()
+    {
+      // arrange
+      var providers = Substitute.For<DbProviderSet>(Substitute.For<IProviderSwitcherFactory>());
+      var args = new InitDbArgs(database, dataStorage) { Providers = providers };
+
+      // act
+      processor.Process(args);
+
+      // assert
+      providers
+        .DidNotReceive()
+        .RegisterSwitcher(Arg.Any<Type>(), Arg.Is<Type>(t => !t.Name.EndsWith("Switcher")));
+    }
   }
 }

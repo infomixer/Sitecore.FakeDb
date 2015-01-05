@@ -40,7 +40,10 @@
       var switcherTypes =
         baseType.Assembly
           .GetTypes()
-          .Where(t => t.IsVisible && t.BaseType != null && t.BaseType.IsGenericType &&
+          .Where(t => t.Name.EndsWith("Switcher") &&
+                      t.IsVisible &&
+                      t.BaseType != null &&
+                      t.BaseType.IsGenericType &&
                       t.BaseType.GetGenericTypeDefinition() == baseType);
 
       foreach (var switcherType in switcherTypes)
@@ -51,6 +54,8 @@
           continue;
         }
 
+        //Console.Out.WriteLine("+++ Registering switcher" + switcherType.Namespace + "." + switcherType.Name);
+        //Console.Out.WriteLine("    Registering provider" + providerType.Namespace + "." + providerType.Name);
         providers.RegisterSwitcher(providerType, switcherType);
       }
     }
