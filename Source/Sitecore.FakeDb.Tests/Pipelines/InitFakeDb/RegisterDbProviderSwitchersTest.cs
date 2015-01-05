@@ -4,6 +4,7 @@
   using NSubstitute;
   using Sitecore.Data;
   using Sitecore.Data.IDTables;
+  using Sitecore.Data.Proxies;
   using Sitecore.FakeDb.Data.Engines;
   using Sitecore.FakeDb.Data.IDTables;
   using Sitecore.FakeDb.Links;
@@ -13,13 +14,21 @@
   using Sitecore.FakeDb.Security.Accounts;
   using Sitecore.FakeDb.Security.Web;
   using Sitecore.FakeDb.Tasks;
+  using Sitecore.Globalization;
   using Sitecore.Links;
   using Sitecore.Resources.Media;
+  using Sitecore.Security;
   using Sitecore.Security.AccessControl;
   using Sitecore.Security.Accounts;
   using Sitecore.Security.Authentication;
+  using Sitecore.Security.Domains;
+  using Sitecore.SecurityModel;
+  using Sitecore.Sites;
   using Sitecore.Tasks;
+  using Sitecore.Workflows;
   using System;
+  using System.Globalization;
+  using System.Web.Profile;
   using System.Web.Security;
   using Xunit;
   using Xunit.Extensions;
@@ -72,8 +81,17 @@
       providers.Received().RegisterSwitcher(providerType, switcherType);
     }
 
-    [Fact]
-    public void ShouldRegisterAuthenticationProviderSwitcher()
+    [Theory]
+    [InlineData(typeof(AuthenticationProvider), typeof(AuthenticationSwitcher))]
+    [InlineData(typeof(CultureInfo), typeof(ThreadCultureSwitcher))]
+    [InlineData(typeof(AuthorizationProvider), typeof(Sitecore.Security.AccessControl.AuthorizationSwitcher))]
+    [InlineData(typeof(Domain), typeof(DomainSwitcher))]
+    [InlineData(typeof(ProfileProvider), typeof(ProfileSwitcher))]
+    [InlineData(typeof(SecurityState), typeof(SecurityStateSwitcher))]
+    [InlineData(typeof(User), typeof(UserSwitcher))]
+    [InlineData(typeof(WorkflowContextState), typeof(WorkflowContextStateSwitcher))]
+    //[InlineData(typeof(SiteContext), typeof(SiteContextSwitcher))]
+    public void ShouldRegisterCommonSitecoreSwitchers(Type providerType, Type switcherType)
     {
       // arrange
       var providers = Substitute.For<DbProviderSet>(Substitute.For<IProviderSwitcherFactory>());
@@ -83,9 +101,7 @@
       processor.Process(args);
 
       // assert
-      providers
-        .Received()
-        .RegisterSwitcher(typeof(AuthenticationProvider), typeof(AuthenticationSwitcher));
+      providers.Received().RegisterSwitcher(providerType, switcherType);
     }
   }
 }

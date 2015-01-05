@@ -6,6 +6,8 @@
   using Sitecore.Diagnostics;
   using Sitecore.FakeDb.Data.IDTables;
   using Sitecore.Security.Authentication;
+  using Sitecore.Common;
+  using System.Reflection;
 
   public class RegisterDbProviderSwitchers
   {
@@ -24,11 +26,21 @@
 
     protected virtual void RegisterThreadLocalProviderSwitchers(InitDbArgs args)
     {
+      this.RegisterSwitchers(args.Providers, typeof(ThreadLocalProviderSwitcher<>));
+    }
+
+    public virtual void RegisterCommonProviderSwitchers(InitDbArgs args)
+    {
+      this.RegisterSwitchers(args.Providers, typeof(Switcher<>));
+    }
+
+    protected void RegisterSwitchers(DbProviderSet providers, Type baseType)
+    {
       var switcherTypes =
-        typeof(ThreadLocalProviderSwitcher<object>).Assembly
+        baseType.Assembly
           .GetTypes()
-          .Where(t => t.BaseType != null && t.BaseType.IsGenericType &&
-                      t.BaseType.GetGenericTypeDefinition() == typeof(ThreadLocalProviderSwitcher<>));
+          .Where(t => t.IsVisible && t.BaseType != null && t.BaseType.IsGenericType &&
+                      t.BaseType.GetGenericTypeDefinition() == baseType);
 
       foreach (var switcherType in switcherTypes)
       {
@@ -38,13 +50,8 @@
           continue;
         }
 
-        args.Providers.RegisterSwitcher(providerType, switcherType);
+        providers.RegisterSwitcher(providerType, switcherType);
       }
-    }
-
-    protected virtual void RegisterCommonProviderSwitchers(InitDbArgs args)
-    {
-      args.Providers.RegisterSwitcher(typeof(AuthenticationProvider), typeof(AuthenticationSwitcher));
     }
   }
 }

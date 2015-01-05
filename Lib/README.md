@@ -2,7 +2,10 @@
 
 Copy the following DLLs from your Sitecore's `Website\bin`:
 
+* HtmlAgilityPack.dll
+* ITHit.WebDAV.Server.dll
 * Lucene.Net.dll
+* Mvp.Xml.dll
 * Sitecore.Analytics.dll
 * Sitecore.ContentSearch.dll
 * Sitecore.ContentSearch.Linq.dll
