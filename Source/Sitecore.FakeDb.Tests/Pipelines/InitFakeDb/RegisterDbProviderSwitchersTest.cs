@@ -17,6 +17,7 @@
   using Sitecore.Resources.Media;
   using Sitecore.Security.AccessControl;
   using Sitecore.Security.Accounts;
+  using Sitecore.Security.Authentication;
   using Sitecore.Tasks;
   using System;
   using System.Web.Security;
@@ -58,7 +59,7 @@
     [InlineData(typeof(MediaProvider), typeof(MediaProviderSwitcher))]
     [InlineData(typeof(RoleProvider), typeof(RoleProviderSwitcher))]
     [InlineData(typeof(TaskDatabase), typeof(TaskDatabaseSwitcher))]
-    public void ShouldRegisterDbProviderSwitchers(Type providerType, Type switcherType)
+    public void ShouldRegisterThreadLocalProviderSwitchers(Type providerType, Type switcherType)
     {
       // arrange
       var providers = Substitute.For<DbProviderSet>(Substitute.For<IProviderSwitcherFactory>());
@@ -69,6 +70,22 @@
 
       // assert
       providers.Received().RegisterSwitcher(providerType, switcherType);
+    }
+
+    [Fact]
+    public void ShouldRegisterAuthenticationProviderSwitcher()
+    {
+      // arrange
+      var providers = Substitute.For<DbProviderSet>(Substitute.For<IProviderSwitcherFactory>());
+      var args = new InitDbArgs(database, dataStorage) { Providers = providers };
+
+      // act
+      processor.Process(args);
+
+      // assert
+      providers
+        .Received()
+        .RegisterSwitcher(typeof(AuthenticationProvider), typeof(AuthenticationSwitcher));
     }
   }
 }

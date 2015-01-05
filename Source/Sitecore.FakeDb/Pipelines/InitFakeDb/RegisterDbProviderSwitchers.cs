@@ -1,10 +1,11 @@
 ﻿namespace Sitecore.FakeDb.Pipelines.InitFakeDb
 {
+  using System;
   using System.Linq;
   using Sitecore.Data.IDTables;
   using Sitecore.Diagnostics;
   using Sitecore.FakeDb.Data.IDTables;
-  using System;
+  using Sitecore.Security.Authentication;
 
   public class RegisterDbProviderSwitchers
   {
@@ -17,6 +18,12 @@
         return;
       }
 
+      this.RegisterThreadLocalProviderSwitchers(args);
+      this.RegisterCommonProviderSwitchers(args);
+    }
+
+    protected virtual void RegisterThreadLocalProviderSwitchers(InitDbArgs args)
+    {
       var switcherTypes =
         typeof(ThreadLocalProviderSwitcher<object>).Assembly
           .GetTypes()
@@ -33,6 +40,11 @@
 
         args.Providers.RegisterSwitcher(providerType, switcherType);
       }
+    }
+
+    protected virtual void RegisterCommonProviderSwitchers(InitDbArgs args)
+    {
+      args.Providers.RegisterSwitcher(typeof(AuthenticationProvider), typeof(AuthenticationSwitcher));
     }
   }
 }
