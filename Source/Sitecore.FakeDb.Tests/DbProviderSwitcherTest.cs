@@ -51,5 +51,32 @@
 
       Roles.GetAllRoles().Should().BeEmpty();
     }
+
+    [Fact]
+    public void ShouldSwitchProvidersUsingFluentApi()
+    {
+      // arrange
+      var linkDatabase = Substitute.For<LinkDatabase>();
+      var roleProvider = Substitute.For<RoleProvider>();
+      var rolesInRolesProvider = Substitute.For<RolesInRolesProvider>();
+
+      using (var db = new Db())
+      {
+        // act
+        db.Providers
+          .Switch<LinkDatabase>(linkDatabase)
+          .Switch<RoleProvider>(roleProvider)
+          .Switch<RolesInRolesProvider>(rolesInRolesProvider);
+
+        Globals.LinkDatabase.GetBrokenLinks(db.Database);
+        Roles.GetAllRoles();
+        RolesInRolesManager.GetAllRoles(true);
+
+        // assert        
+        linkDatabase.Received().GetBrokenLinks(db.Database);
+        roleProvider.Received().GetAllRoles();
+        rolesInRolesProvider.Received().GetAllRoles(true);
+      }
+    }
   }
 }

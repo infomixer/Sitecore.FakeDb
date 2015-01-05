@@ -48,7 +48,7 @@
       this.providers[providerType] = switcherType;
     }
 
-    public virtual void Switch<TProvider>(TProvider provider)
+    public virtual DbProviderSet Switch<TProvider>(TProvider provider)
     {
       Assert.ArgumentNotNull(provider, "provider");
 
@@ -62,6 +62,8 @@
 
       var switcher = this.switcherFactory.Create(switcherType, provider);
       this.switchers.Add(switcher);
+
+      return this;
     }
 
     public void Dispose()
