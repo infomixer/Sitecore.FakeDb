@@ -4,6 +4,7 @@
   using NSubstitute;
   using Sitecore.Data;
   using Sitecore.Data.IDTables;
+  using Sitecore.Data.Items;
   using Sitecore.Data.Proxies;
   using Sitecore.FakeDb.Data.Engines;
   using Sitecore.FakeDb.Data.IDTables;
@@ -90,7 +91,8 @@
     [InlineData(typeof(SecurityState), typeof(SecurityStateSwitcher))]
     [InlineData(typeof(User), typeof(UserSwitcher))]
     [InlineData(typeof(WorkflowContextState), typeof(WorkflowContextStateSwitcher))]
-    //[InlineData(typeof(SiteContext), typeof(SiteContextSwitcher))]
+    [InlineData(typeof(Item), typeof(ContextItemSwitcher))]
+    [InlineData(typeof(SiteContext), typeof(SiteContextSwitcher))]
     public void ShouldRegisterCommonSitecoreSwitchers(Type providerType, Type switcherType)
     {
       // arrange

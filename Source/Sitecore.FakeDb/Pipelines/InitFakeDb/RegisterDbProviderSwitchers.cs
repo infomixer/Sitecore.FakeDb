@@ -32,6 +32,7 @@
     public virtual void RegisterCommonProviderSwitchers(InitDbArgs args)
     {
       this.RegisterSwitchers(args.Providers, typeof(Switcher<>));
+      this.RegisterSwitchers(args.Providers, typeof(Switcher<,>));
     }
 
     protected void RegisterSwitchers(DbProviderSet providers, Type baseType)
