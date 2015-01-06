@@ -4,6 +4,7 @@
   using System;
   using System.Collections.Generic;
   using System.Collections.ObjectModel;
+  using System.Configuration.Provider;
 
   public class DbProviderSet : IDisposable
   {
@@ -49,6 +50,7 @@
     }
 
     public virtual DbProviderSet Switch<TProvider>(TProvider provider)
+      where TProvider : ProviderBase
     {
       Assert.ArgumentNotNull(provider, "provider");
 
