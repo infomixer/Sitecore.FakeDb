@@ -5,8 +5,14 @@
 
   public class AutoDbAttribute : AutoDataAttribute
   {
+    // TODO: default item should be /sitecore
     public AutoDbAttribute()
-      : base(new Fixture().Customize(new AutoDbCustomization()))
+      : this("/sitecore/content/home")
+    {
+    }
+
+    public AutoDbAttribute(string path)
+      : base(new Fixture().Customize(new AutoDbCustomization(path)))
     {
     }
   }
