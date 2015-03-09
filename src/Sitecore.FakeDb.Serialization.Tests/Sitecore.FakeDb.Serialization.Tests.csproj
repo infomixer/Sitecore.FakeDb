@@ -40,14 +40,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\FluentAssertions.3.2.2\lib\net45\FluentAssertions.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="NSubstitute, Version=1.8.1.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\NSubstitute.1.8.1.0\lib\net45\NSubstitute.dll</HintPath>
-    </Reference>
     <Reference Include="Ploeh.AutoFixture, Version=3.24.1.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\AutoFixture.3.24.1\lib\net40\Ploeh.AutoFixture.dll</HintPath>
@@ -104,10 +96,6 @@
     <ProjectReference Include="..\Sitecore.FakeDb.Serialization\Sitecore.FakeDb.Serialization.csproj">
       <Project>{8958B567-7955-4714-B3A8-BCFB43B0A588}</Project>
       <Name>Sitecore.FakeDb.Serialization</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Sitecore.FakeDb.Tests\Sitecore.FakeDb.Tests.csproj">
-      <Project>{d7ee44ee-1306-4eb6-9514-471905aaa493}</Project>
-      <Name>Sitecore.FakeDb.Tests</Name>
     </ProjectReference>
     <ProjectReference Include="..\Sitecore.FakeDb\Sitecore.FakeDb.csproj">
       <Project>{B1B3C599-9284-4653-9F22-FD0F726984BB}</Project>
