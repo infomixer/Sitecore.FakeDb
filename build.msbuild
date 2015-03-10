@@ -32,6 +32,7 @@
     <XslTransformation XslInputPath="$(NuGetXslt)" XmlInputPaths="$(SerializationTestsDir)\App.config" OutputPaths="$(SerializationTestsDir)\App.config.transform" />
 
     <Exec Command="$(NuGet) pack Sitecore.FakeDb/Sitecore.FakeDb.csproj -Properties Configuration=Release -OutputDirectory ..\$(DeployFolder) -Build -Symbols" WorkingDirectory="$(SourceFolder)" />
+    <Exec Command="$(NuGet) pack Sitecore.FakeDb.AutoXunit/Sitecore.FakeDb.AutoXunit.csproj -Properties Configuration=Release -OutputDirectory ..\$(DeployFolder) -Build -Symbols" WorkingDirectory="$(SourceFolder)" />
     <Exec Command="$(NuGet) pack Sitecore.FakeDb.NSubstitute/Sitecore.FakeDb.NSubstitute.csproj -Properties Configuration=Release -OutputDirectory ..\$(DeployFolder) -Build -Symbols" WorkingDirectory="$(SourceFolder)" />
     <Exec Command="$(NuGet) pack Sitecore.FakeDb.Serialization/Sitecore.FakeDb.Serialization.csproj -Properties Configuration=Release -OutputDirectory ..\$(DeployFolder) -Build -Symbols" WorkingDirectory="$(SourceFolder)" />
 
@@ -43,6 +44,7 @@
 
   <Target Name="Deploy" DependsOnTargets="Packages">
     <Exec Command="$(NuGet) push ..\$(DeployFolder)\Sitecore.FakeDb.?.*.?.nupkg" WorkingDirectory="$(SourceFolder)" />
+    <Exec Command="$(NuGet) push ..\$(DeployFolder)\Sitecore.FakeDb.AutoXunit.?.*.?.nupkg" WorkingDirectory="$(SourceFolder)" />
     <Exec Command="$(NuGet) push ..\$(DeployFolder)\Sitecore.FakeDb.NSubstitute.?.*.?.nupkg" WorkingDirectory="$(SourceFolder)" />
     <Exec Command="$(NuGet) push ..\$(DeployFolder)\Sitecore.FakeDb.Serialization.?.*.?.nupkg" WorkingDirectory="$(SourceFolder)" />
   </Target>
