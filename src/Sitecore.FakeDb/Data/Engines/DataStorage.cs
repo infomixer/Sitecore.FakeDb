@@ -91,14 +91,17 @@ namespace Sitecore.FakeDb.Data.Engines
       if (item as DbTemplate != null)
       {
         var template = (DbTemplate)item;
-        Assert.ArgumentCondition(!this.FakeTemplates.ContainsKey(template.ID), "template", "A template with the same id has already been added.");
 
         if (template is IDsDbItem)
         {
           CorePipeline.Run("loadDsDbTemplate", new DsItemLoadingArgs(template as IDsDbItem, this));
         }
+        else
+        {
+          Assert.ArgumentCondition(!this.FakeTemplates.ContainsKey(template.ID), "template", "A template with the same id has already been added.");
+        }
 
-        this.FakeTemplates.Add(template.ID, template);
+        this.FakeTemplates[template.ID] = template;
         this.Database.Engines.TemplateEngine.Reset();
       }
 
@@ -109,7 +112,7 @@ namespace Sitecore.FakeDb.Data.Engines
 
       CorePipeline.Run("addDbItem", new AddDbItemArgs(item, this));
 
-      this.FakeItems.Add(item.ID, item);
+      this.FakeItems[item.ID] = item;
       foreach (var child in item.Children)
       {
         child.ParentID = item.ID;
@@ -163,7 +166,7 @@ namespace Sitecore.FakeDb.Data.Engines
 
       return ItemHelper.CreateInstance(this.database, fakeItem.Name, fakeItem.ID, fakeItem.TemplateID, fakeItem.BranchId, fields, language, itemVersion);
     }
-    
+
     protected FieldList BuildItemFieldList(DbItem fakeItem, ID templateId, Language language, Version version)
     {
       // build a sequence of templates that the item inherits from

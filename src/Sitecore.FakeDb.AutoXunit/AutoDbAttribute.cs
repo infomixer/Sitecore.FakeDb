@@ -5,9 +5,9 @@
 
   public class AutoDbAttribute : AutoDataAttribute
   {
-    // TODO: default item should be /sitecore
+    // TODO:[High] Remove sitecore.item and content.item serialization files.
     public AutoDbAttribute()
-      : this("/sitecore/content/home")
+      : this("/sitecore")
     {
     }
 
