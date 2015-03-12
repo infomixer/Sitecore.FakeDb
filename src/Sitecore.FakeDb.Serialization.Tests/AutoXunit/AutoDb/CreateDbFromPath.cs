@@ -6,134 +6,94 @@
   using Xunit;
   using Xunit.Extensions;
 
-  [Trait("AutoDb", "Load all serialized items (default)")]
-  public class CreateDefault
+  [Trait("AutoDb", "Load all serialized items: [AutoDb]")]
+  public class LoadAllSerializedItems
   {
     [AutoDb]
-    [Theory(DisplayName = @"Database is ""master""")]
+    [Theory(DisplayName = @"Context database is ""master""")]
     public void DatabaseMaster(Db db)
     {
       db.Database.Name.Should().Be("master");
     }
 
     [AutoDb]
-    [Theory(DisplayName = "All serialized content items are loaded")]
+    [Theory(DisplayName = "All content items are loaded")]
     public void ContentItemsLoaded(Db db)
     {
       db.GetItem("/sitecore/content/Home/Child Item/Grandchild Item").Should().NotBeNull();
     }
 
     [AutoDb]
-    [Theory(DisplayName = "All serialized templates are loaded")]
+    [Theory(DisplayName = "All system items are loaded", Skip = "To be implemented.")]
+    public void SystemItemsLoaded(Db db)
+    {
+      db.GetItem("/sitecore/system/Marketing Control Panel/Campaigns").Should().NotBeNull();
+    }
+
+    [AutoDb]
+    [Theory(DisplayName = "All templates are loaded")]
     public void TemplatesLoaded(Db db)
     {
       db.Database.GetTemplate(Constants.SomeTemplateId).Should().NotBeNull();
     }
-
-    [AutoDb]
-    [Theory(DisplayName = @"Serialization folder is {tests-project}\data\serialization\master\", Skip = "To be implemented")]
-    public void SerializationFolderIsDataSerializationMaster()
-    {
-    }
   }
 
-  [Trait("AutoDb", "Load a single serialized item by path")]
-  public class LoadSingleItemByPath
+  [Trait("AutoDb", @"Load all serialized templates: [AutoDb(""/sitecore/templates"")]")]
+  public class LoadAllTemplates
   {
-    private const string SitecoreContentHome = "/sitecore/content/home";
+    private const string Path = "/sitecore/templates";
 
-    [AutoDb(SitecoreContentHome)]
-    [Theory(DisplayName = "Item is loaded")]
-    public void ItemLoaded(Db db)
+    [AutoDb(Path)]
+    [Theory(DisplayName = "Content items are not loaded", Skip = "To be implemented.")]
+    public void ContentItemsNotLoaded(Db db)
     {
-      db.GetItem(SitecoreContentHome).Should().NotBeNull();
+      db.GetItem("/sitecore/content").Children.Should().BeEmpty();
     }
 
-    [AutoDb(SitecoreContentHome)]
-    [Theory(DisplayName = "Template is loaded")]
-    public void TemplateLoaded(Db db)
+    [AutoDb(Path)]
+    [Theory(DisplayName = "System items are not loaded")]
+    public void SystemItemsNotLoaded(Db db)
     {
-      db.GetItem(SitecoreContentHome).Template.InnerItem.Languages.Length.Should().BeGreaterThan(3);
+      db.GetItem("/sitecore/system").Children.Should().BeEmpty();
     }
 
-    [AutoDb(SitecoreContentHome)]
-    [Theory(DisplayName = "Children items are not loaded", Skip = "To be implemented")]
-    public void ChildrenNotLoaded(Db db)
-    {
-      db.GetItem(SitecoreContentHome).Children.Should().BeEmpty();
-    }
-
-    [AutoDb(SitecoreContentHome)]
-    [Theory(DisplayName = "Children templates are not loaded", Skip = "To be implemented")]
-    public void ChildrenTemplatesNotLoaded(Db db)
-    {
-      db.Database.GetTemplate(Constants.SomeTemplateId).Should().BeNull();
-    }
-  }
-
-  [Trait("AutoDb", "Load serialized item tree by path")]
-  public class LoadTreeByPath
-  {
-    private const string SitecoreContentHome = "/sitecore/content/home";
-
-    [AutoDb(SitecoreContentHome)]
-    [Theory(DisplayName = "Root item is loaded")]
-    public void RootItemLoaded(Db db)
-    {
-      db.GetItem(SitecoreContentHome).Should().NotBeNull();
-    }
-
-    [AutoDb(SitecoreContentHome)]
-    [Theory(DisplayName = "Root item template is loaded")]
-    public void RootItemTemplateLoaded(Db db)
-    {
-      db.GetItem(SitecoreContentHome).Template.InnerItem.Languages.Length.Should().BeGreaterThan(3);
-    }
-
-    [AutoDb(SitecoreContentHome)]
-    [Theory(DisplayName = "Children items are loaded")]
-    public void ChildrenLoaded(Db db)
-    {
-      db.GetItem(SitecoreContentHome).Children.Should().NotBeEmpty();
-    }
-
-    [AutoDb(SitecoreContentHome)]
-    [Theory(DisplayName = "Children templates are loaded")]
-    public void ChildrenTemplatesLoaded(Db db)
+    [AutoDb(Path)]
+    [Theory(DisplayName = "All templates are loaded")]
+    public void AllTemplatesLoaded(Db db)
     {
       db.Database.GetTemplate(Constants.SomeTemplateId).Should().NotBeNull();
     }
   }
 
-  [Trait("AutoDb", "Load item tree when root is not serialized")]
-  public class LoadMixedTreeByPath
+  [Trait("AutoDb", @"Load single item: [AutoDb(""/sitecore/content/Home/Child Item"")]")]
+  public class LoadSingleItem
   {
-    private const string SitecoreContentHome = "/sitecore/content/home";
+    private const string Path = "/sitecore/content/Home/Child Item";
 
-    [AutoDb(SitecoreContentHome)]
-    [Theory(DisplayName = "Root item is generated")]
-    public void RootItemGenerated(Db db)
+    [AutoDb(Path)]
+    [Theory(DisplayName = "The item is loaded")]
+    public void ItemLoaded(Db db)
     {
-      db.GetItem(SitecoreContentHome).Should().NotBeNull();
+      db.GetItem(Path).Should().NotBeNull();
     }
 
-    [AutoDb(SitecoreContentHome)]
-    [Theory(DisplayName = "Root item template is Folder")]
-    public void RootItemTemplateIsFolder(Db db)
+    [AutoDb(Path)]
+    [Theory(DisplayName = "Children are not loaded", Skip = "To be implemented.")]
+    public void ChildrenNotLoaded(Db db)
     {
-      db.GetItem(SitecoreContentHome).Should().NotBeNull();
+      db.GetItem(Path).Children.Should().BeEmpty();
     }
 
-    [AutoDb(SitecoreContentHome)]
-    [Theory(DisplayName = "Children items are loaded")]
-    public void ChildrenLoaded(Db db)
+    [AutoDb(Path)]
+    [Theory(DisplayName = "Parent is not loaded but auto-generated")]
+    public void ParentGenerated(Db db)
     {
-      db.GetItem(SitecoreContentHome).Children.Should().NotBeEmpty();
+      db.GetItem(Path).Parent.Versions.Count.Should().Be(1);
     }
 
-    [AutoDb(SitecoreContentHome)]
-    [Theory(DisplayName = "Children templates are loaded")]
-    public void ChildrenTemplatesLoaded(Db db)
+    [AutoDb(Path)]
+    [Theory(DisplayName = "All templates are loaded")]
+    public void AllTemplatesLoaded(Db db)
     {
       db.Database.GetTemplate(Constants.SomeTemplateId).Should().NotBeNull();
     }
