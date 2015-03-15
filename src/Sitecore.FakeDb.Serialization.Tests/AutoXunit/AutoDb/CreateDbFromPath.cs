@@ -17,21 +17,29 @@
     }
 
     [AutoDb]
-    [Theory(DisplayName = "All content items are loaded")]
+    [Theory(DisplayName = "All serialized content items are loaded")]
     public void ContentItemsLoaded(Db db)
     {
       db.GetItem("/sitecore/content/Home/Child Item/Grandchild Item").Should().NotBeNull();
     }
 
     [AutoDb]
-    [Theory(DisplayName = "All system items are loaded", Skip = "To be implemented.")]
-    public void SystemItemsLoaded(Db db)
+    [Theory(DisplayName = "All serialized system items are loaded and can be located by id")]
+    public void SystemItemsLoadedById(Db db)
+    {
+      db.GetItem(Constants.CampaignsId).Should().NotBeNull();
+    }
+
+
+    [AutoDb]
+    [Theory(DisplayName = "All serialized system items are loaded and can be located by path", Skip = "To be implemented.")]
+    public void SystemItemsLoadedByPath(Db db)
     {
       db.GetItem("/sitecore/system/Marketing Control Panel/Campaigns").Should().NotBeNull();
     }
 
     [AutoDb]
-    [Theory(DisplayName = "All templates are loaded")]
+    [Theory(DisplayName = "All serialized templates are loaded")]
     public void TemplatesLoaded(Db db)
     {
       db.Database.GetTemplate(Constants.SomeTemplateId).Should().NotBeNull();
@@ -101,6 +109,8 @@
 
   public static class Constants
   {
-    public static ID SomeTemplateId = new ID("{F6A72DBF-558F-40E5-8033-EE4ACF027FE2}");
+    public static readonly ID CampaignsId = new ID("{EC095310-746F-4C1B-A73F-941863564DC2}");
+
+    public static readonly ID SomeTemplateId = new ID("{F6A72DBF-558F-40E5-8033-EE4ACF027FE2}");
   }
 }

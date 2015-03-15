@@ -25,19 +25,19 @@
     {
       Assert.ArgumentNotNull(fixture, "fixture");
 
-      const string serializationFolderName = "master";
+      const string SerializationFolderName = "master";
 
-      var templates =
-        GetSerializationInfo(serializationFolderName, "/sitecore/templates", true)
-          .Where(si => si.Key.TemplateID == TemplateIDs.Template.ToString())
-          .Select(si => new DsDbTemplate(serializationFolderName, si.Key, si.Value));
+      var templates = LoadSerializedTemplates(SerializationFolderName);
+      var content = LoadSerializedItems(SerializationFolderName, "/sitecore/content");
+      var system = LoadSerializedItems(SerializationFolderName, "/sitecore/system");
 
-      var items =
-        GetSerializationInfo(serializationFolderName, "/sitecore/content", false)
-          .Where(si => si.Key.TemplateID != TemplateIDs.Template.ToString())
-          .Select(si => new DsDbItem(serializationFolderName, si.Key, si.Value, true));
-
-      fixture.Customize<Db>(d => d.Do(x => { Add(x, templates); Add(x, items); }));
+      fixture.Customize<Db>(d => d.Do(
+        x =>
+        {
+          Add(x, templates);
+          Add(x, content);
+          Add(x, system);
+        }));
     }
 
     private static IEnumerable<KeyValuePair<SyncItem, FileInfo>> GetSerializationInfo(string serializationFolderName, string root, bool recursive)
@@ -52,6 +52,20 @@
             truePath.Replace('/', Path.DirectorySeparatorChar).Trim(new[] { Path.DirectorySeparatorChar })));
 
       return folder.Deserialize(recursive);
+    }
+
+    private static IEnumerable<DsDbTemplate> LoadSerializedTemplates(string serializationFolderName)
+    {
+      return GetSerializationInfo(serializationFolderName, "/sitecore/templates", true)
+        .Where(si => si.Key.TemplateID == TemplateIDs.Template.ToString())
+        .Select(si => new DsDbTemplate(serializationFolderName, si.Key, si.Value));
+    }
+
+    private static IEnumerable<DsDbItem> LoadSerializedItems(string serializationFolderName, string path)
+    {
+      return GetSerializationInfo(serializationFolderName, path, false)
+        .Where(si => si.Key.TemplateID != TemplateIDs.Template.ToString())
+        .Select(si => new DsDbItem(serializationFolderName, si.Key, si.Value, true));
     }
 
     private static void Add(Db db, IEnumerable<DbItem> items)
