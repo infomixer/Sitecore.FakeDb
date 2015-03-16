@@ -2,7 +2,7 @@
 {
   using FluentAssertions;
   using Sitecore.FakeDb.AutoXunit;
-  using Xunit.Extensions;
+  using Xunit;
 
   public class AutoDbTest
   {

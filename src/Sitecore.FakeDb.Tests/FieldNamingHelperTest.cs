@@ -3,7 +3,7 @@
   using FluentAssertions;
   using Ploeh.AutoFixture.Xunit;
   using Sitecore.Data;
-  using Xunit.Extensions;
+  using Xunit;
 
   public class FieldNamingHelperTest
   {

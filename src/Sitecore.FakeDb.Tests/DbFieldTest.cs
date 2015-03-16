@@ -6,7 +6,6 @@
   using Sitecore.Data;
   using Sitecore.Globalization;
   using Xunit;
-  using Xunit.Extensions;
 
   public class DbFieldTest
   {

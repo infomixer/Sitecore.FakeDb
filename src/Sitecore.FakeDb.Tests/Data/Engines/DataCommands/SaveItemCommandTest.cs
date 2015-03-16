@@ -8,7 +8,6 @@
   using Sitecore.FakeDb.Data.Items;
   using Sitecore.StringExtensions;
   using Xunit;
-  using Xunit.Extensions;
   using SaveItemCommand = Sitecore.FakeDb.Data.Engines.DataCommands.SaveItemCommand;
 
   public class SaveItemCommandTest : CommandTestBase

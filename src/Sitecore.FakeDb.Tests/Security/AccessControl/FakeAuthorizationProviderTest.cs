@@ -11,7 +11,6 @@
   using Sitecore.Security.AccessControl;
   using Sitecore.Security.Accounts;
   using Xunit;
-  using Xunit.Extensions;
 
   public class FakeAuthorizationProviderTest : IDisposable
   {
@@ -52,8 +51,11 @@
     [Fact]
     public void ShouldNotFailWhenSetAccessRules()
     {
-      // act & assert
-      Assert.DoesNotThrow(() => this.provider.SetAccessRules(this.entity, this.rules));
+      // act
+      Action action = () => this.provider.SetAccessRules(this.entity, this.rules);
+
+      // asset
+      action.ShouldNotThrow();
     }
 
     [Fact]

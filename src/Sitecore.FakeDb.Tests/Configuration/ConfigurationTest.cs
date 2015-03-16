@@ -7,7 +7,6 @@
   using Sitecore.FakeDb.Data;
   using Sitecore.FakeDb.Data.IDTables;
   using Xunit;
-  using Xunit.Extensions;
 
   public class ConfigurationTest
   {

@@ -8,7 +8,6 @@
   using Sitecore.FakeDb.Pipelines;
   using Sitecore.Pipelines;
   using Xunit;
-  using Xunit.Extensions;
 
   public class PipelineWatcherTest : IDisposable
   {
@@ -163,7 +162,8 @@
       w.Dispose();
 
       // assert
-      Assert.DoesNotThrow(() => processor.Process(new PipelineArgs()));
+      Action action = () => processor.Process(new PipelineArgs());
+      action.ShouldNotThrow();
     }
 
     [Fact]

@@ -1,13 +1,9 @@
-﻿using Sitecore.Data.Items;
-using Sitecore.Data.Serialization.Exceptions;
-
-namespace Sitecore.FakeDb.Tests
+﻿namespace Sitecore.FakeDb.Tests
 {
   using FluentAssertions;
-  using Xunit;
-  using Xunit.Extensions;
   using Sitecore.Data;
   using Sitecore.Data.Managers;
+  using Xunit;
 
   public class DbStandardValuesTest
   {
@@ -24,7 +20,7 @@ namespace Sitecore.FakeDb.Tests
         var root = db.GetItem(ItemIDs.ContentRoot);
 
         // act
-        Item item = ItemManager.CreateItem("Home", root, templateId);
+        var item = ItemManager.CreateItem("Home", root, templateId);
 
         // assert
         var fieldId = TemplateManager.GetFieldId("Title", templateId, db.Database);

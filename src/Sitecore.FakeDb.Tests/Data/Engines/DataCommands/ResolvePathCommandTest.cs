@@ -5,7 +5,6 @@
   using Sitecore.Data.Engines;
   using Sitecore.FakeDb.Data.Engines.DataCommands;
   using Xunit;
-  using Xunit.Extensions;
 
   public class ResolvePathCommandTest : CommandTestBase
   {

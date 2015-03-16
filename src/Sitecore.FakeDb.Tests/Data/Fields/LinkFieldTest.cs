@@ -4,7 +4,6 @@
   using Sitecore.Data;
   using Sitecore.Data.Fields;
   using Xunit;
-  using Xunit.Extensions;
 
   /// <summary>
   /// Internal link: <link text="Link to Home item" linktype="internal" class="default" title="Home" target='Active Browser' querystring="sc_lang=en" id="{110D559F-DEA5-42EA-9C1C-8A5DF7E70EF9}" />

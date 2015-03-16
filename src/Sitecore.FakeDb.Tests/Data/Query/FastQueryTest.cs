@@ -5,7 +5,6 @@
   using FluentAssertions;
   using Sitecore.Data;
   using Xunit;
-  using Xunit.Extensions;
 
   public class FastQueryTest
   {

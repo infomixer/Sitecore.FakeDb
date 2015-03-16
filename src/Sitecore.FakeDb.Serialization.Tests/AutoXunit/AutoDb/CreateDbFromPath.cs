@@ -4,7 +4,6 @@
   using Sitecore.Data;
   using Sitecore.FakeDb.AutoXunit;
   using Xunit;
-  using Xunit.Extensions;
 
   [Trait("AutoDb", "Load all serialized items: [AutoDb]")]
   public class LoadAllSerializedItems

@@ -15,7 +15,6 @@
   using Sitecore.Security.Accounts;
   using Sitecore.SecurityModel;
   using Xunit;
-  using Xunit.Extensions;
   using Version = Sitecore.Data.Version;
 
   public class DbTest
