@@ -16,12 +16,12 @@
   </Target>
 
   <Target Name="Tests" DependsOnTargets="Compile">
-    <xunit Assembly="$(FakeDbTestsOutDir)\Sitecore.FakeDb.Tests.dll" />
-    <xunit Assembly="$(NSubstituteTestsOutDir)\Sitecore.FakeDb.NSubstitute.Tests.dll" />
-    <xunit Assembly="$(SerializationTestsOutDir)\Sitecore.FakeDb.Serialization.Tests.dll" />
+    <xunit Assemblies="$(FakeDbTestsOutDir)\Sitecore.FakeDb.Tests.dll" />
+    <xunit Assemblies="$(NSubstituteTestsOutDir)\Sitecore.FakeDb.NSubstitute.Tests.dll" />
+    <xunit Assemblies="$(SerializationTestsOutDir)\Sitecore.FakeDb.Serialization.Tests.dll" />
 
-    <xunit Assembly="$(FakeDbTestsOutDir)\Sitecore.FakeDb.Tests.dll" ConfigFile="$(NSubstituteTestsOutDir)\Sitecore.FakeDb.NSubstitute.Tests.dll.config" />
-    <xunit Assembly="$(FakeDbTestsOutDir)\Sitecore.FakeDb.Tests.dll" ConfigFile="$(SerializationTestsOutDir)\Sitecore.FakeDb.Serialization.Tests.dll.config" />
+    <xunit Assemblies="$(FakeDbTestsOutDir)\Sitecore.FakeDb.Tests.dll" ConfigFile="$(NSubstituteTestsOutDir)\Sitecore.FakeDb.NSubstitute.Tests.dll.config" />
+    <xunit Assemblies="$(FakeDbTestsOutDir)\Sitecore.FakeDb.Tests.dll" ConfigFile="$(SerializationTestsOutDir)\Sitecore.FakeDb.Serialization.Tests.dll.config" />
   </Target>
 
   <Target Name="Packages" DependsOnTargets="Tests">
