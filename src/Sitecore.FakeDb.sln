@@ -28,6 +28,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sitecore.FakeDb.Serializati
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sitecore.FakeDb.AutoXunit", "Sitecore.FakeDb.AutoXunit\Sitecore.FakeDb.AutoXunit.csproj", "{E123EFE4-FA61-4975-A9EB-7C943316BADA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{61B65D79-BB0C-4A89-A410-E5C90A646ED6}"
+	ProjectSection(SolutionItems) = preProject
+		..\build.config = ..\build.config
+		..\build.msbuild = ..\build.msbuild
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
