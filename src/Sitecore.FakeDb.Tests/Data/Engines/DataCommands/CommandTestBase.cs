@@ -1,13 +1,11 @@
 ﻿namespace Sitecore.FakeDb.Tests.Data.Engines.DataCommands
 {
-  using System;
   using NSubstitute;
-  using Sitecore.Configuration;
   using Sitecore.Data;
   using Sitecore.FakeDb.Data.Engines;
   using Sitecore.FakeDb.Data.Engines.DataCommands;
 
-  public abstract class CommandTestBase : IDisposable
+  public abstract class CommandTestBase
   {
     protected readonly Database database;
 
@@ -22,11 +20,6 @@
 
       this.innerCommand = Substitute.For<DataEngineCommand>();
       this.innerCommand.DataStorage.Returns(this.dataStorage);
-    }
-
-    public void Dispose()
-    {
-      Factory.Reset();
     }
   }
 }

@@ -1,54 +1,47 @@
 ﻿namespace Sitecore.FakeDb.Tests.Data.Items
 {
-  using System;
   using FluentAssertions;
-  using Sitecore.Configuration;
   using Sitecore.Data;
   using Sitecore.FakeDb.Data.Items;
   using Sitecore.Globalization;
   using Xunit;
 
-  public class ItemHelperTest : IDisposable
+  public class ItemHelperTest
   {
-    private const string Name = "home";
-
     [Fact]
-    public void ShouldSimpleCreateItem()
+    public void ShouldCreateSomeItem()
     {
       // arrange
-      var database = Database.GetDatabase("master");
-      var item = ItemHelper.CreateInstance(database, Name);
+      var item = ItemHelper.CreateInstance();
 
       // assert
-      item.Name.Should().Be(Name);
+      item.Name.Should().NotBeEmpty();
       item.ID.Should().NotBeNull();
       item.TemplateID.Should().NotBeNull();
       item.Database.Should().NotBeNull();
-      item.Language.Should().Be(Language.Parse("en"));
+      item.Language.Name.Should().Be("en");
+      item.Version.Number.Should().Be(1);
     }
 
     [Fact]
-    public void ShouldCreateItem()
+    public void ShouldCreateSpecificItem()
     {
       var id = ID.NewID;
       var templateId = ID.NewID;
       var database = Database.GetDatabase("master");
       var language = Language.Parse("uk-UA");
+      var version = new Version(2);
 
       // arrange
-      var item = ItemHelper.CreateInstance(database, Name, id, templateId, ID.NewID, new FieldList(), language);
+      var item = ItemHelper.CreateInstance(database, "Home", id, templateId, ID.NewID, new FieldList(), language, version);
 
       // assert
-      item.Name.Should().Be(Name, "name");
-      item.ID.Should().Be(id, "id");
-      item.TemplateID.Should().Be(templateId, "templateId");
-      item.Database.Should().Be(database, "database");
-      item.Language.Should().Be(language, "language");
-    }
-
-    public void Dispose()
-    {
-      Factory.Reset();
+      item.Name.Should().Be("Home");
+      item.ID.Should().Be(id);
+      item.TemplateID.Should().Be(templateId);
+      item.Database.Should().Be(database);
+      item.Language.Should().Be(language);
+      item.Version.Should().Be(version);
     }
   }
 }

@@ -1,15 +1,13 @@
 ﻿namespace Sitecore.FakeDb.Tests.Pipelines.InitFakeDb
 {
-  using System;
   using NSubstitute;
-  using Sitecore.Configuration;
   using Sitecore.Data;
   using Sitecore.FakeDb.Data.Engines;
   using Sitecore.FakeDb.Data.Engines.DataCommands;
   using Sitecore.FakeDb.Pipelines.InitFakeDb;
   using Xunit;
 
-  public class InitDataEngineCommandsTest : IDisposable
+  public class InitDataEngineCommandsTest
   {
     private readonly Database database;
 
@@ -71,11 +69,6 @@
       ((IDataEngineCommand)commands.ResolvePathPrototype).Received().Initialize(Arg.Is<DataStorage>(ds => ds == this.dataStorage));
       ((IDataEngineCommand)commands.SaveItemPrototype).Received().Initialize(Arg.Is<DataStorage>(ds => ds == this.dataStorage));
       ((IDataEngineCommand)commands.SetBlobStreamPrototype).Received().Initialize(Arg.Is<DataStorage>(ds => ds == this.dataStorage));
-    }
-
-    public void Dispose()
-    {
-      Factory.Reset();
     }
   }
 }

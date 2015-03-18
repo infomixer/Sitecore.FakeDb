@@ -4,7 +4,6 @@
   using FluentAssertions;
   using NSubstitute;
   using Ploeh.AutoFixture;
-  using Sitecore.Configuration;
   using Sitecore.Data.Items;
   using Sitecore.FakeDb.Data.Items;
   using Sitecore.FakeDb.Security.AccessControl;
@@ -147,7 +146,6 @@
     public void Dispose()
     {
       this.provider.LocalProvider.Value = null;
-      Factory.Reset();
     }
   }
 }

@@ -703,9 +703,6 @@
     [Fact]
     public void ShouldThrowExceptionIfNoDbInstanceInitialized()
     {
-      // arrange
-      Factory.Reset();
-
       // act
       Action action = () => Database.GetDatabase("master").GetItem("/sitecore/content");
 
