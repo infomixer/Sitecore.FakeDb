@@ -1,30 +1,34 @@
-﻿using System.Web.UI;
-using System.Xml.Schema;
-using Sitecore.Data.Items;
-
-namespace Sitecore.FakeDb.Data
+﻿namespace Sitecore.FakeDb.Data
 {
+  using System.Linq;
+  using System.Threading;
   using Sitecore.Data;
   using Sitecore.Data.Fields;
+  using Sitecore.Data.Items;
   using Sitecore.Diagnostics;
   using Sitecore.FakeDb.Data.Engines;
 
   public class FakeStandardValuesProvider : StandardValuesProvider, IRequireDataStorage
   {
-    private DataStorage storage;
+    private readonly ThreadLocal<DataStorage> storage;
 
-    DataStorage IRequireDataStorage.DataStorage
+    public FakeStandardValuesProvider()
     {
-      get { return this.storage; }
+      this.storage = new ThreadLocal<DataStorage>();
+    }
+
+    public virtual DataStorage DataStorage
+    {
+      get { return this.storage.Value; }
     }
 
     public override string GetStandardValue(Field field)
     {
       var templateId = field.Item.TemplateID;
 
-      Assert.IsNotNull(this.storage, "DataStorage cannot be null.");
+      Assert.IsNotNull(this.DataStorage, "DataStorage cannot be null.");
 
-      var template = this.storage.GetFakeTemplate(templateId);
+      var template = this.DataStorage.GetFakeTemplate(templateId);
 
       if (template == null)
       {
@@ -33,9 +37,16 @@ namespace Sitecore.FakeDb.Data
         return string.Empty;
       }
 
-      var standardValue = FindStandardValueInTheTemplate(template, field.ID) ?? string.Empty;
+      var standardValue = this.FindStandardValueInTheTemplate(template, field.ID) ?? string.Empty;
 
-      return ReplaceTokens(standardValue, field.Item);
+      return this.ReplaceTokens(standardValue, field.Item);
+    }
+
+    public virtual void SetDataStorage(DataStorage dataStorage)
+    {
+      Assert.ArgumentNotNull(dataStorage, "dataStorage");
+
+      this.storage.Value = dataStorage;
     }
 
     protected string ReplaceTokens(string standardValue, Item item)
@@ -50,31 +61,17 @@ namespace Sitecore.FakeDb.Data
     {
       if (template.StandardValues.InnerFields.ContainsKey(fieldId))
       {
-        return template.StandardValues[fieldId].Value; 
+        return template.StandardValues[fieldId].Value;
       }
 
-      if (template.BaseIDs != null && template.BaseIDs.Length > 0)
+      if (template.BaseIDs == null || template.BaseIDs.Length <= 0)
       {
-        foreach (var baseId in template.BaseIDs)
-        {
-          var baseTemplate = this.storage.GetFakeTemplate(baseId);
-          var value = FindStandardValueInTheTemplate(baseTemplate, fieldId);
-
-          if (value != null)
-          {
-            return value;
-          }
-        }
+        return null;
       }
 
-      return null;
-    }
-
-    void IRequireDataStorage.SetDataStorage(DataStorage dataStorage)
-    {
-      Assert.ArgumentNotNull(dataStorage, "dataStorage");
-
-      this.storage = dataStorage;
+      var dataStorage = this.DataStorage;
+      return template.BaseIDs.Select(dataStorage.GetFakeTemplate)
+                             .Select(baseTemplate => this.FindStandardValueInTheTemplate(baseTemplate, fieldId)).FirstOrDefault(value => value != null);
     }
   }
 }
