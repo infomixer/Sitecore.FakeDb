@@ -1,7 +1,5 @@
 ﻿namespace Sitecore.FakeDb.Data
 {
-  using System.Linq;
-  using System.Threading;
   using Sitecore.Data;
   using Sitecore.Data.Fields;
   using Sitecore.Data.Items;
@@ -10,25 +8,20 @@
 
   public class FakeStandardValuesProvider : StandardValuesProvider, IRequireDataStorage
   {
-    private readonly ThreadLocal<DataStorage> storage;
+    private DataStorage storage;
 
-    public FakeStandardValuesProvider()
+    DataStorage IRequireDataStorage.DataStorage
     {
-      this.storage = new ThreadLocal<DataStorage>();
-    }
-
-    public virtual DataStorage DataStorage
-    {
-      get { return this.storage.Value; }
+      get { return this.storage; }
     }
 
     public override string GetStandardValue(Field field)
     {
       var templateId = field.Item.TemplateID;
 
-      Assert.IsNotNull(this.DataStorage, "DataStorage cannot be null.");
+      Assert.IsNotNull(this.storage, "DataStorage cannot be null.");
 
-      var template = this.DataStorage.GetFakeTemplate(templateId);
+      var template = this.storage.GetFakeTemplate(templateId);
 
       if (template == null)
       {
@@ -37,16 +30,9 @@
         return string.Empty;
       }
 
-      var standardValue = this.FindStandardValueInTheTemplate(template, field.ID) ?? string.Empty;
+      var standardValue = FindStandardValueInTheTemplate(template, field.ID) ?? string.Empty;
 
-      return this.ReplaceTokens(standardValue, field.Item);
-    }
-
-    public virtual void SetDataStorage(DataStorage dataStorage)
-    {
-      Assert.ArgumentNotNull(dataStorage, "dataStorage");
-
-      this.storage.Value = dataStorage;
+      return ReplaceTokens(standardValue, field.Item);
     }
 
     protected string ReplaceTokens(string standardValue, Item item)
@@ -73,15 +59,21 @@
       {
         var baseTemplate = this.storage.GetFakeTemplate(baseId);
         var value = this.FindStandardValueInTheTemplate(baseTemplate, fieldId);
+
         if (value != null)
         {
           return value;
-        return null;
+        }
       }
 
-      var dataStorage = this.DataStorage;
-      return template.BaseIDs.Select(dataStorage.GetFakeTemplate)
-                             .Select(baseTemplate => this.FindStandardValueInTheTemplate(baseTemplate, fieldId)).FirstOrDefault(value => value != null);
+      return null;
+    }
+
+    void IRequireDataStorage.SetDataStorage(DataStorage dataStorage)
+    {
+      Assert.ArgumentNotNull(dataStorage, "dataStorage");
+
+      this.storage = dataStorage;
     }
   }
 }
