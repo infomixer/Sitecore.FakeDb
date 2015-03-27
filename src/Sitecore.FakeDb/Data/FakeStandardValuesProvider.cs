@@ -59,13 +59,23 @@
 
     protected string FindStandardValueInTheTemplate(DbTemplate template, ID fieldId)
     {
-      if (template.StandardValues.InnerFields.ContainsKey(fieldId))
+      if (template.StandardValues.ContainsKey(fieldId))
       {
         return template.StandardValues[fieldId].Value;
       }
 
       if (template.BaseIDs == null || template.BaseIDs.Length <= 0)
       {
+        return null;
+      }
+
+      foreach (var baseId in template.BaseIDs)
+      {
+        var baseTemplate = this.storage.GetFakeTemplate(baseId);
+        var value = this.FindStandardValueInTheTemplate(baseTemplate, fieldId);
+        if (value != null)
+        {
+          return value;
         return null;
       }
 
