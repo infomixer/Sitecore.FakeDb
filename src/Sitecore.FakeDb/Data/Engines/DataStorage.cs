@@ -91,7 +91,6 @@ namespace Sitecore.FakeDb.Data.Engines
       if (item as DbTemplate != null)
       {
         var template = (DbTemplate)item;
-        Assert.ArgumentCondition(!this.FakeTemplates.ContainsKey(template.ID), "template", "A template with the same id has already been added.");
 
         if (template is IDsDbItem)
         {
@@ -102,7 +101,8 @@ namespace Sitecore.FakeDb.Data.Engines
           Assert.ArgumentCondition(!this.FakeTemplates.ContainsKey(template.ID), "template", "A template with the same id has already been added.");
         }
 
-        this.FakeTemplates.Add(template.ID, template);
+        // TODO: Should be Add()?
+        this.FakeTemplates[template.ID] = template;
         this.Database.Engines.TemplateEngine.Reset();
       }
 
@@ -113,7 +113,8 @@ namespace Sitecore.FakeDb.Data.Engines
 
       CorePipeline.Run("addDbItem", new AddDbItemArgs(item, this));
 
-      this.FakeItems.Add(item.ID, item);
+      // TODO: Should be Add()?
+      this.FakeItems[item.ID] = item;
       foreach (var child in item.Children)
       {
         child.ParentID = item.ID;
