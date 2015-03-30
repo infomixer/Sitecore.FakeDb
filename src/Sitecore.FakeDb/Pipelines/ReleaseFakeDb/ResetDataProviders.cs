@@ -12,7 +12,7 @@
           continue;
         }
 
-        // rds.SetDataStorage(null);
+        rds.SetDataStorage(null);
       }
     }
   }
